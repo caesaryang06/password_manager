@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="密码查看器">
@@ -10,95 +10,77 @@
 <link rel="manifest" href="manifest.json">
 <title>密码查看器</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #111; color: #eee; min-height: 100vh; padding: 20px 16px; }
-
-  h1 { font-size: 20px; font-weight: 600; text-align: center; margin-bottom: 6px; color: #fff; }
-  .subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 28px; }
-
-  .card { background: #1e1e1e; border-radius: 14px; padding: 18px; margin-bottom: 16px; border: 1px solid #2a2a2a; }
-  .card-title { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
-
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #111; color: #eee; min-height: 100vh; padding: 24px 16px 40px; }
+  h1 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 4px; color: #fff; }
+  .subtitle { font-size: 13px; color: #666; text-align: center; margin-bottom: 28px; }
+  .card { background: #1e1e1e; border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+  .card-title { font-size: 12px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; }
   .file-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .file-label { font-size: 14px; color: #ccc; width: 100px; flex-shrink: 0; font-family: monospace; }
-  .file-btn { flex: 1; padding: 9px 14px; background: #2a2a2a; border: 1px solid #333; border-radius: 9px; color: #ccc; font-size: 13px; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .file-btn.ok { border-color: #2a6e3f; color: #4ade80; background: #1a2e24; }
+  .file-row:last-child { margin-bottom: 0; }
+  .file-label { font-size: 13px; color: #aaa; width: 90px; flex-shrink: 0; font-family: monospace; }
+  .file-btn { flex: 1; padding: 10px 14px; background: #2a2a2a; border: none; border-radius: 10px; color: #aaa; font-size: 13px; cursor: pointer; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-btn.ok { color: #4ade80; background: #1a2e22; }
   input[type="file"] { display: none; }
-
-  .pwd-row { display: flex; gap: 10px; margin-top: 4px; }
-  input[type="password"], input[type="text"] { flex: 1; padding: 11px 14px; background: #2a2a2a; border: 1px solid #333; border-radius: 9px; color: #eee; font-size: 15px; outline: none; }
-  input:focus { border-color: #ff6600; }
-
-  .btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
-  .btn:active { opacity: 0.8; }
-  .btn-primary { background: #ff6600; color: #fff; }
-  .btn-secondary { background: #2a2a2a; color: #ccc; border: 1px solid #333; font-size: 14px; padding: 10px; }
-
-  .error { background: #2e1a1a; border: 1px solid #5a2020; border-radius: 10px; padding: 12px 14px; color: #f87171; font-size: 14px; margin-bottom: 14px; display: none; }
-
+  input[type="password"], input[type="text"] { width: 100%; padding: 13px 14px; background: #2a2a2a; border: none; border-radius: 10px; color: #eee; font-size: 16px; outline: none; }
+  .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; }
+  .btn-primary { background: #ff6600; color: #fff; margin-top: 6px; }
+  .btn-primary:active { background: #cc5200; }
+  .error { background: #2e1a1a; border-radius: 10px; padding: 12px 14px; color: #f87171; font-size: 14px; margin-bottom: 12px; display: none; }
   #app-list { display: none; }
-  .search-box { width: 100%; padding: 11px 14px; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 10px; color: #eee; font-size: 15px; outline: none; margin-bottom: 14px; }
-  .search-box:focus { border-color: #ff6600; }
-
-  .app-card { background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .count { font-size: 13px; color: #666; }
+  .lock-btn { padding: 8px 14px; background: #2a2a2a; border: none; border-radius: 8px; color: #888; font-size: 13px; cursor: pointer; }
+  .search-box { width: 100%; padding: 12px 14px; background: #1e1e1e; border: none; border-radius: 10px; color: #eee; font-size: 15px; outline: none; margin-bottom: 12px; }
+  .app-card { background: #1e1e1e; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; }
   .app-card:active { background: #252525; }
-  .app-name { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
-  .app-user { font-size: 13px; color: #888; }
-
-  .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto; padding: 20px 16px; }
-  .detail-card { background: #1e1e1e; border-radius: 16px; padding: 20px; max-width: 480px; margin: 0 auto; }
-  .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .detail-name { font-size: 20px; font-weight: 700; color: #fff; }
-  .close-btn { width: 32px; height: 32px; border-radius: 50%; background: #2a2a2a; border: none; color: #aaa; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-  .field { margin-bottom: 14px; }
-  .field-label { font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
-  .field-value { font-size: 15px; color: #ddd; font-family: monospace; background: #151515; border-radius: 8px; padding: 10px 12px; word-break: break-all; position: relative; }
-  .field-value.password { letter-spacing: 2px; }
-  .copy-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #333; border: none; border-radius: 6px; color: #aaa; font-size: 12px; padding: 4px 9px; cursor: pointer; }
-  .copy-btn:active { background: #444; color: #fff; }
-
-  .toggle-pwd { background: #2a2a2a; border: 1px solid #333; border-radius: 8px; color: #aaa; font-size: 12px; padding: 5px 10px; cursor: pointer; margin-top: 6px; }
-
-  .empty { text-align: center; color: #555; padding: 40px 0; font-size: 15px; }
-  .count { font-size: 13px; color: #666; margin-bottom: 12px; }
-
-  .lock-btn { display: block; width: 100%; margin-top: 10px; padding: 11px; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 10px; color: #888; font-size: 14px; cursor: pointer; text-align: center; }
-
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .app-name { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+  .app-user { font-size: 13px; color: #666; }
+  .empty { text-align: center; color: #555; padding: 50px 0; font-size: 15px; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .detail-wrap { padding: 20px 16px 40px; max-width: 500px; margin: 0 auto; }
+  .detail-card { background: #1e1e1e; border-radius: 16px; padding: 20px; }
+  .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .detail-name { font-size: 20px; font-weight: 700; color: #fff; flex: 1; margin-right: 12px; word-break: break-all; }
+  .close-btn { width: 34px; height: 34px; border-radius: 50%; background: #2a2a2a; border: none; color: #aaa; font-size: 20px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .field { margin-bottom: 16px; }
+  .field-label { font-size: 12px; color: #555; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .field-value { font-size: 15px; color: #ddd; font-family: monospace; background: #151515; border-radius: 8px; padding: 11px 12px; word-break: break-all; line-height: 1.5; }
+  .field-actions { display: flex; gap: 8px; margin-top: 6px; }
+  .action-btn { padding: 7px 14px; background: #2a2a2a; border: none; border-radius: 8px; color: #aaa; font-size: 13px; cursor: pointer; }
+  .action-btn:active { background: #333; color: #fff; }
+  .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 22px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; white-space: nowrap; }
   .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
 <h1>🔐 密码查看器</h1>
-<p class="subtitle">离线运行，数据不离开设备</p>
+<p class="subtitle">数据在本地解密，不上传网络</p>
 
 <div id="login-panel">
   <div class="card">
     <div class="card-title">选择数据文件</div>
     <div class="file-row">
       <span class="file-label">appdata</span>
-      <button class="file-btn" id="btn-appdata" onclick="document.getElementById('f-appdata').click()">点击选择文件</button>
+      <button class="file-btn" id="btn-appdata" onclick="document.getElementById('f-appdata').click()">点击选择</button>
       <input type="file" id="f-appdata" onchange="loadFile('appdata', this)">
     </div>
     <div class="file-row">
       <span class="file-label">salt</span>
-      <button class="file-btn" id="btn-salt" onclick="document.getElementById('f-salt').click()">点击选择文件</button>
+      <button class="file-btn" id="btn-salt" onclick="document.getElementById('f-salt').click()">点击选择</button>
       <input type="file" id="f-salt" onchange="loadFile('salt', this)">
     </div>
     <div class="file-row">
       <span class="file-label">master_pass</span>
-      <button class="file-btn" id="btn-master" onclick="document.getElementById('f-master').click()">点击选择文件</button>
+      <button class="file-btn" id="btn-master" onclick="document.getElementById('f-master').click()">点击选择</button>
       <input type="file" id="f-master" onchange="loadFile('master', this)">
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">输入访问密码</div>
-    <div class="pwd-row">
-      <input type="password" id="pwd-input" placeholder="访问密码" onkeydown="if(event.key==='Enter')unlock()">
-    </div>
+    <div class="card-title">访问密码</div>
+    <input type="password" id="pwd-input" placeholder="输入访问密码" onkeydown="if(event.key==='Enter')unlock()">
   </div>
 
   <div class="error" id="err-box"></div>
@@ -106,16 +88,18 @@
 </div>
 
 <div id="app-list">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-    <div class="count" id="count-label"></div>
-    <button class="lock-btn" style="width:auto;margin:0;padding:8px 14px;" onclick="lockApp()">🔒 锁定</button>
+  <div class="top-bar">
+    <span class="count" id="count-label"></span>
+    <button class="lock-btn" onclick="lockApp()">🔒 锁定</button>
   </div>
-  <input type="text" class="search-box" id="search-box" placeholder="搜索应用名称..." oninput="renderList()" autocomplete="off">
+  <input type="text" class="search-box" id="search-box" placeholder="搜索应用..." oninput="renderList()" autocomplete="off" autocorrect="off" spellcheck="false">
   <div id="list-container"></div>
 </div>
 
-<div class="detail-overlay" id="detail-overlay">
-  <div class="detail-card" id="detail-card"></div>
+<div class="overlay" id="overlay">
+  <div class="detail-wrap">
+    <div class="detail-card" id="detail-card"></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -123,6 +107,7 @@
 <script>
 const files = { appdata: null, salt: null, master: null };
 let decryptedData = null;
+let currentDetail = {};
 
 function loadFile(key, input) {
   const file = input.files[0];
@@ -130,8 +115,7 @@ function loadFile(key, input) {
   const reader = new FileReader();
   reader.onload = e => {
     files[key] = new Uint8Array(e.target.result);
-    const btnId = key === 'master' ? 'btn-master' : `btn-${key}`;
-    const btn = document.getElementById(btnId);
+    const btn = document.getElementById('btn-' + key);
     btn.textContent = file.name;
     btn.classList.add('ok');
   };
@@ -143,7 +127,7 @@ async function sha256hex(str) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function pbkdf2Key(password, salt) {
+async function pbkdf2DeriveKey(password, salt) {
   const pwKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, pwKey, 256);
   return new Uint8Array(bits);
@@ -156,9 +140,9 @@ function base64urlDecode(s) {
 }
 
 async function fernetDecrypt(keyBytes, tokenBytes) {
-  const tokenB64 = new TextDecoder().decode(tokenBytes);
-  const raw = base64urlDecode(tokenB64.trim());
-  if (raw[0] !== 0x80) throw new Error('invalid fernet version');
+  const tokenStr = new TextDecoder().decode(tokenBytes).trim();
+  const raw = base64urlDecode(tokenStr);
+  if (raw[0] !== 0x80) throw new Error('无效的数据格式');
   const iv = raw.slice(9, 25);
   const ciphertext = raw.slice(25, raw.length - 32);
   const hmacStored = raw.slice(raw.length - 32);
@@ -167,7 +151,7 @@ async function fernetDecrypt(keyBytes, tokenBytes) {
   const encryptionKey = keyBytes.slice(16, 32);
   const hmacKey = await crypto.subtle.importKey('raw', signingKey, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
   const valid = await crypto.subtle.verify('HMAC', hmacKey, hmacStored, signData);
-  if (!valid) throw new Error('HMAC验证失败，密码可能错误');
+  if (!valid) throw new Error('HMAC 校验失败，密码错误或数据损坏');
   const aesKey = await crypto.subtle.importKey('raw', encryptionKey, { name: 'AES-CBC' }, false, ['decrypt']);
   const plain = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, aesKey, ciphertext);
   return new TextDecoder().decode(plain);
@@ -188,8 +172,7 @@ async function unlock() {
     const storedHash = new TextDecoder().decode(files.master).trim();
     const inputHash = await sha256hex(pwd);
     if (inputHash !== storedHash) { showError('访问密码错误'); return; }
-    const rawKey = await pbkdf2Key(pwd, files.salt);
-    const b64Key = btoa(String.fromCharCode(...rawKey)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const rawKey = await pbkdf2DeriveKey(pwd, files.salt);
     const jsonStr = await fernetDecrypt(rawKey, files.appdata);
     decryptedData = JSON.parse(jsonStr);
     document.getElementById('login-panel').style.display = 'none';
@@ -201,90 +184,89 @@ async function unlock() {
 }
 
 function renderList() {
-  const q = document.getElementById('search-box').value.toLowerCase();
+  const q = (document.getElementById('search-box').value || '').toLowerCase();
   const keys = Object.keys(decryptedData).filter(k => k.toLowerCase().includes(q));
-  document.getElementById('count-label').textContent = `共 ${keys.length} 个应用`;
+  document.getElementById('count-label').textContent = '共 ' + keys.length + ' 个应用';
   const container = document.getElementById('list-container');
   if (keys.length === 0) { container.innerHTML = '<div class="empty">没有找到匹配的应用</div>'; return; }
   container.innerHTML = keys.map(name => {
     const info = decryptedData[name];
-    return `<div class="app-card" onclick="showDetail('${encodeURIComponent(name)}')">
-      <div class="app-name">${escHtml(name)}</div>
-      <div class="app-user">${info.username ? escHtml(info.username) : '<span style="color:#555">无用户名</span>'}</div>
-    </div>`;
+    const user = info.username ? esc(info.username) : '<span style="color:#444">无用户名</span>';
+    return '<div class="app-card" onclick="showDetail(\'' + encodeURIComponent(name) + '\')">'
+         + '<div class="app-name">' + esc(name) + '</div>'
+         + '<div class="app-user">' + user + '</div>'
+         + '</div>';
   }).join('');
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function showDetail(encodedName) {
   const name = decodeURIComponent(encodedName);
   const info = decryptedData[name] || {};
-  const overlay = document.getElementById('detail-overlay');
-  const card = document.getElementById('detail-card');
-
-  const fields = [
-    { label: '用户名', key: 'username', mono: true, copy: true },
-    { label: '密码', key: 'password', mono: true, copy: true, pwd: true },
-    { label: '网站链接', key: 'url', mono: false, copy: true },
-    { label: '备注', key: 'notes', mono: false, copy: false },
-  ];
-
-  const fieldsHtml = fields.map(f => {
-    const val = info[f.key] || '';
-    if (!val) return '';
-    const valId = `fv-${f.key}`;
-    const copyBtn = f.copy ? `<button class="copy-btn" onclick="copyText('${valId}','${f.key}')">复制</button>` : '';
-    const pwdToggle = f.pwd ? `<br><button class="toggle-pwd" onclick="togglePwd('${valId}')">显示/隐藏密码</button>` : '';
-    const cls = f.pwd ? 'field-value password' : 'field-value';
-    const display = f.pwd ? '•'.repeat(val.length) : escHtml(val);
-    return `<div class="field">
-      <div class="field-label">${f.label}</div>
-      <div class="${cls}" id="${valId}" data-real="${escHtml(val)}" data-shown="false" style="padding-right:${f.copy?'56px':'12px'}">${display}${copyBtn}</div>
-      ${pwdToggle}
-    </div>`;
-  }).join('');
-
-  card.innerHTML = `
-    <div class="detail-header">
-      <div class="detail-name">${escHtml(name)}</div>
-      <button class="close-btn" onclick="closeDetail()">✕</button>
-    </div>
-    ${fieldsHtml || '<div class="empty">无详细信息</div>'}
-  `;
-  overlay.style.display = 'block';
+  currentDetail = { name, info, showPwd: false };
+  renderDetail();
+  document.getElementById('overlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
-function togglePwd(id) {
-  const el = document.getElementById(id);
-  const real = el.dataset.real;
-  const shown = el.dataset.shown === 'true';
-  const btn = el.querySelector('.copy-btn');
-  if (shown) {
-    el.childNodes[0].textContent = '•'.repeat(real.length);
-    el.dataset.shown = 'false';
+function renderDetail() {
+  const { name, info, showPwd } = currentDetail;
+
+  function fieldHtml(label, val, isPwd) {
+    if (!val) return '';
+    const display = (isPwd && !showPwd) ? '•'.repeat(Math.min(val.length, 24)) : esc(val);
+    let actions = '<div class="field-actions">';
+    if (isPwd) actions += '<button class="action-btn" onclick="togglePwd()">' + (showPwd ? '隐藏' : '显示') + '密码</button>';
+    actions += '<button class="action-btn" onclick="copyVal(\'' + encodeURIComponent(val) + '\')">复制</button>';
+    actions += '</div>';
+    return '<div class="field"><div class="field-label">' + label + '</div>'
+         + '<div class="field-value">' + display + '</div>' + actions + '</div>';
+  }
+
+  const body = fieldHtml('用户名', info.username, false)
+             + fieldHtml('密码', info.password, true)
+             + fieldHtml('网站链接', info.url, false)
+             + fieldHtml('备注', info.notes, false);
+
+  document.getElementById('detail-card').innerHTML =
+    '<div class="detail-header">'
+    + '<div class="detail-name">' + esc(name) + '</div>'
+    + '<button class="close-btn" onclick="closeDetail()">✕</button>'
+    + '</div>'
+    + (body || '<div class="empty">无详细信息</div>');
+}
+
+function togglePwd() {
+  currentDetail.showPwd = !currentDetail.showPwd;
+  renderDetail();
+}
+
+function copyVal(encoded) {
+  const text = decodeURIComponent(encoded);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => fallbackCopy(text));
   } else {
-    el.childNodes[0].textContent = real;
-    el.dataset.shown = 'true';
+    fallbackCopy(text);
   }
 }
 
-function copyText(id, key) {
-  const el = document.getElementById(id);
-  const text = el.dataset.real;
-  navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); showToast('已复制');
-  });
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast('已复制');
 }
 
 function closeDetail() {
-  document.getElementById('detail-overlay').style.display = 'none';
+  currentDetail = {};
+  document.getElementById('overlay').style.display = 'none';
   document.body.style.overflow = '';
 }
 
@@ -293,12 +275,12 @@ function lockApp() {
   files.appdata = files.salt = files.master = null;
   document.getElementById('pwd-input').value = '';
   document.getElementById('search-box').value = '';
-  ['btn-appdata','btn-salt','btn-master'].forEach(id => {
-    const b = document.getElementById(id);
-    b.textContent = '点击选择文件';
+  ['appdata', 'salt', 'master'].forEach(k => {
+    const b = document.getElementById('btn-' + k);
+    b.textContent = '点击选择';
     b.classList.remove('ok');
+    document.getElementById('f-' + k).value = '';
   });
-  ['f-appdata','f-salt','f-master'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('app-list').style.display = 'none';
   document.getElementById('login-panel').style.display = 'block';
 }
@@ -310,8 +292,8 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 1800);
 }
 
-document.getElementById('detail-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeDetail();
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this || e.target.className === 'detail-wrap') closeDetail();
 });
 </script>
 </body>
